@@ -12,9 +12,16 @@
 <form action="/order" method="post">
     用户: <input name="customer"><br>
     食物: <input name="food"><br>
-    数量: <input name="quantity"><br>
+    数量: <input name="quantity" type="number" min="1" required><br>
     <input type="submit">
 </form>
+
+<h3>菜单查询</h3>
+<a href="/menu">查看全部菜单</a><br>
+<a href="/menu?name=Fried">搜索Fried相关菜品</a>
+
+<h3>查看订单详情</h3>
+<a href="/order/1001">查看订单1001详情</a>
 
 </body>
 </html>

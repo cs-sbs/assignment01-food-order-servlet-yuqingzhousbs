@@ -10,6 +10,7 @@
         <welcome-file>order.html</welcome-file>
     </welcome-file-list>
 
+    <!-- 1. 菜单查询 -->
     <servlet>
         <servlet-name>MenuListServlet</servlet-name>
         <servlet-class>cs.sbs.web.servlet.MenuListServlet</servlet-class>
@@ -19,6 +20,7 @@
         <url-pattern>/menu</url-pattern>
     </servlet-mapping>
 
+    <!-- 2. 创建订单（POST）：精确匹配 /order -->
     <servlet>
         <servlet-name>OrderCreateServlet</servlet-name>
         <servlet-class>cs.sbs.web.servlet.OrderCreateServlet</servlet-class>
@@ -28,6 +30,7 @@
         <url-pattern>/order</url-pattern>
     </servlet-mapping>
 
+    <!-- 3. 订单详情（GET）：路径匹配 /order/* -->
     <servlet>
         <servlet-name>OrderDetailServlet</servlet-name>
         <servlet-class>cs.sbs.web.servlet.OrderDetailServlet</servlet-class>
