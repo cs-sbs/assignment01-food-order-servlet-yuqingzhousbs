@@ -7,7 +7,7 @@ public class Order {
     private String food;
     private int quantity;
 
-    //构造
+
     public Order(int id, String customer, String food, int quantity) {
         this.id = id;
         this.customer = customer;
