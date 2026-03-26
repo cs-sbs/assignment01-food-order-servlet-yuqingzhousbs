@@ -31,7 +31,7 @@ public class OrderCreateServlet extends HttpServlet {
             orderList = (List<Order>) getServletContext().getAttribute("orderList");
 
             if (getServletContext().getAttribute("orderIdGenerator") == null) {
-                AtomicInteger generator = new AtomicInteger(1002);//1002
+                AtomicInteger generator = new AtomicInteger(1002);
                 getServletContext().setAttribute("orderIdGenerator", generator);
             }
             orderIdGenerator = (AtomicInteger) getServletContext().getAttribute("orderIdGenerator");
