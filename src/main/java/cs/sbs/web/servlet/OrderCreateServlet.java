@@ -60,11 +60,9 @@ public class OrderCreateServlet extends HttpServlet {
         int id = generator.getAndIncrement();
         list.add(new Order(id, customer.trim(), food.trim(), quantity));
 
-        // 强制更新上下文
         getServletContext().setAttribute("orderIdGenerator", generator);
         getServletContext().setAttribute("orderList", list);
 
-        // 严格输出
         out.println("Order Created: " + id);
         out.flush();
     }
