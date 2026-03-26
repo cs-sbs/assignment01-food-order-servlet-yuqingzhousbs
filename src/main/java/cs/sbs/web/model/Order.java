@@ -1,13 +1,14 @@
 package cs.sbs.web.model;
 
-public class Order {
+import java.io.Serializable;
 
+// 关键：实现 Serializable 接口，才能把对象存到文件里
+public class Order implements Serializable {
     private int id;
     private String customer;
     private String food;
     private int quantity;
 
-    //构造
     public Order(int id, String customer, String food, int quantity) {
         this.id = id;
         this.customer = customer;
@@ -15,35 +16,8 @@ public class Order {
         this.quantity = quantity;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = customer;
-    }
-
-    public String getFood() {
-        return food;
-    }
-
-    public void setFood(String food) {
-        this.food = food;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+    public int getId() { return id; }
+    public String getCustomer() { return customer; }
+    public String getFood() { return food; }
+    public int getQuantity() { return quantity; }
 }
