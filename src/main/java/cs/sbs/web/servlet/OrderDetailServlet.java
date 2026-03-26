@@ -32,11 +32,11 @@ public class OrderDetailServlet extends HttpServlet {
             return;
         }
 
-        // 直接读静态 orderList（已经从文件恢复了）
+        // 查询静态全局订单
         Order target = null;
-        for (Order o : OrderCreateServlet.orderList) {
-            if (o.getId() == orderId) {
-                target = o;
+        for (Order order : OrderCreateServlet.orderList) {
+            if (order.getId() == orderId) {
+                target = order;
                 break;
             }
         }
@@ -48,6 +48,7 @@ public class OrderDetailServlet extends HttpServlet {
             return;
         }
 
+        // 严格匹配测试格式
         out.println("Order Detail");
         out.println();
         out.println("Order ID: " + target.getId());

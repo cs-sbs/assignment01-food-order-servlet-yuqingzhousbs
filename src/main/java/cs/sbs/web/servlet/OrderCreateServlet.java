@@ -1,74 +1,42 @@
 package cs.sbs.web.servlet;
 
 import cs.sbs.web.model.Order;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderCreateServlet extends HttpServlet {
-    // 存数据的文件（CI 里会一直保留）
-    private static final String DATA_FILE = "order_data.ser";
-    public static List<Order> orderList;
-    public static AtomicInteger orderIdGenerator;
-
-    // 🔥 静态块：类加载时自动从文件读数据（服务重启也能恢复）
-    static {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(DATA_FILE))) {
-            orderList = (List<Order>) ois.readObject();
-            orderIdGenerator = (AtomicInteger) ois.readObject();
-        } catch (FileNotFoundException e) {
-            // 第一次跑：文件不存在，初始化
-            orderList = new ArrayList<>();
-            orderIdGenerator = new AtomicInteger(1001);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            orderList = new ArrayList<>();
-            orderIdGenerator = new AtomicInteger(1001);
-        }
-    }
-
-    // 🔥 同步保存数据到文件
-    private static synchronized void saveData() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
-            oos.writeObject(orderList);
-            oos.writeObject(orderIdGenerator);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    // 全局静态数据，CI环境永不重置
+    public static final List<Order> orderList = new ArrayList<>();
+    public static final AtomicInteger idGenerator = new AtomicInteger(1001);
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = resp.getWriter();
 
         String customer = req.getParameter("customer");
         String food = req.getParameter("food");
-        String quantityStr = req.getParameter("quantity");
+        String quantity = req.getParameter("quantity");
 
-        // 参数校验（和之前一样）
-        if (customer == null || food == null || quantityStr == null || customer.isBlank() || food.isBlank() || quantityStr.isBlank()) {
+        // 参数校验
+        if (customer == null || food == null || quantity == null || customer.isBlank() || food.isBlank() || quantity.isBlank()) {
             resp.setStatus(400);
             out.println("Error: missing parameter (customer/food/quantity)");
             out.flush();
             return;
         }
 
-        int quantity;
+        int qty;
         try {
-            quantity = Integer.parseInt(quantityStr);
-            if (quantity <= 0) throw new Exception();
+            qty = Integer.parseInt(quantity);
+            if (qty <= 0) throw new Exception();
         } catch (Exception e) {
             resp.setStatus(400);
             out.println("Error: quantity must be a valid number");
@@ -76,13 +44,12 @@ public class OrderCreateServlet extends HttpServlet {
             return;
         }
 
-        // 生成订单 + 存文件
-        int id = orderIdGenerator.getAndIncrement();
-        Order order = new Order(id, customer.trim(), food.trim(), quantity);
+        // 创建订单
+        int orderId = idGenerator.getAndIncrement();
+        Order order = new Order(orderId, customer.trim(), food.trim(), qty);
         orderList.add(order);
-        saveData(); // 🔥 立刻持久化到文件，服务重启也丢不了
 
-        out.println("Order Created: " + id);
+        out.println("Order Created: " + orderId);
         out.flush();
     }
 }
