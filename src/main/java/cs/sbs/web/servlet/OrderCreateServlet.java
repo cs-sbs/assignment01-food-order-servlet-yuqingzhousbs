@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderCreateServlet extends HttpServlet {
 
-
     private List<Order> orderList;
     private AtomicInteger orderIdGenerator;
 
@@ -24,16 +23,11 @@ public class OrderCreateServlet extends HttpServlet {
         super.init(config);
 
         synchronized (getServletContext()) {
+            // 强制每次启动都清空数据，彻底解决本地/ GitHub 不一致问题
+            getServletContext().setAttribute("orderList", new ArrayList<Order>());
+            getServletContext().setAttribute("orderIdGenerator", new AtomicInteger(1001));
 
-            if (getServletContext().getAttribute("orderList") == null) {
-                getServletContext().setAttribute("orderList", new ArrayList<Order>());
-            }
             orderList = (List<Order>) getServletContext().getAttribute("orderList");
-
-            if (getServletContext().getAttribute("orderIdGenerator") == null) {
-                AtomicInteger generator = new AtomicInteger(1002);
-                getServletContext().setAttribute("orderIdGenerator", generator);
-            }
             orderIdGenerator = (AtomicInteger) getServletContext().getAttribute("orderIdGenerator");
         }
     }
@@ -42,7 +36,7 @@ public class OrderCreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         resp.setContentType("text/plain; charset=UTF-8");
-        req.setCharacterEncoding("UTF-8"); // 强制编码
+        req.setCharacterEncoding("UTF-8");
         PrintWriter out = resp.getWriter();
 
         String customer = req.getParameter("customer");
@@ -77,6 +71,8 @@ public class OrderCreateServlet extends HttpServlet {
         synchronized (orderList) {
             orderList.add(newOrder);
         }
+
+        getServletContext().setAttribute("orderList", orderList);
 
         out.printf("Order Created: %d\n", orderId);
         out.flush();
