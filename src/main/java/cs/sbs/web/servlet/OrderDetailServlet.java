@@ -68,7 +68,7 @@ public class OrderDetailServlet extends HttpServlet {
         out.println("Order Detail");
         out.println();
         out.println("Order ID: " + foundOrder.getId());
-        out.println("Customer: " + foundOrder.getCustomer()); // 这里必须输出 Charlie
+        out.println("Customer: " + foundOrder.getCustomer());
         out.println("Food: " + foundOrder.getFood());
         out.println("Quantity: " + foundOrder.getQuantity());
         out.flush();

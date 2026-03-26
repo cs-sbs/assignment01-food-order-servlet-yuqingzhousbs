@@ -25,7 +25,7 @@ public class OrderCreateServlet extends HttpServlet {
         synchronized (getServletContext()) {
             // 强制每次启动都清空数据，彻底解决本地/ GitHub 不一致问题
             getServletContext().setAttribute("orderList", new ArrayList<Order>());
-            getServletContext().setAttribute("orderIdGenerator", new AtomicInteger(1001));
+            getServletContext().setAttribute("orderIdGenerator", new AtomicInteger(1002));
 
             orderList = (List<Order>) getServletContext().getAttribute("orderList");
             orderIdGenerator = (AtomicInteger) getServletContext().getAttribute("orderIdGenerator");
