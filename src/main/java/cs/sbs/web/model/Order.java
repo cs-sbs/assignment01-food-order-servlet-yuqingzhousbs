@@ -16,8 +16,19 @@ public class Order implements Serializable {
         this.quantity = quantity;
     }
 
-    public int getId() { return id; }
-    public String getCustomer() { return customer; }
-    public String getFood() { return food; }
-    public int getQuantity() { return quantity; }
+    public int getId() {
+        return id;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public String getFood() {
+        return food;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
 }
